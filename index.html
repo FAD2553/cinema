@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films pour l'Évolution Mentale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Styles généraux */
+        :root {
+            --color-black: #000000;
+            --color-dark-gray: #1a1a1a;
+            --color-yellow: #FFFF00;
+            --color-light-gray: #333333;
+        }
+
+        body {
+            background-color: var(--color-black);
+            color: var(--color-yellow);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        /* Landing Page (Page d'accueil) */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+            border-bottom: 5px solid var(--color-yellow);
+            padding: 20px;
+        }
+
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-section h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px var(--color-yellow);
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .hero-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: var(--color-yellow);
+            color: var(--color-black);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            border: 2px solid var(--color-yellow);
+            transition: all 0.3s ease;
+        }
+
+        .hero-button:hover {
+            background-color: transparent;
+            color: var(--color-yellow);
+        }
+
+        /* Section des films */
+        .films-section {
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .films-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            border-bottom: 3px solid var(--color-yellow);
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 5px var(--color-yellow);
+        }
+
+        .films-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Conteneur de chaque film */
+        .film-container {
+            background-color: var(--color-dark-gray);
+            border: 2px solid var(--color-yellow);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .film-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .film-container h3 {
+            color: var(--color-yellow);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .film-container .description {
+            font-size: 1rem;
+            line-height: 1.6;
+            text-align: left;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .film-container .description.expanded {
+            -webkit-line-clamp: unset;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--color-yellow);
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+
+        /* Vidéo responsive */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* Ratio 16:9 */
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .pagination a {
+            color: var(--color-yellow);
+            background-color: var(--color-dark-gray);
+            border: 2px solid var(--color-yellow);
+            padding: 10px 15px;
+            margin: 0 5px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination a.active, .pagination a:hover {
+            background-color: var(--color-yellow);
+            color: var(--color-black);
+        }
+
+        /* Citation */
+        .quote-section {
+            background-color: var(--color-dark-gray);
+            border: 2px solid var(--color-yellow);
+            padding: 40px;
+            margin: 0 auto 40px;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .quote-section blockquote {
+            font-style: italic;
+            font-size: 1.5rem;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        
+        /* ... (le reste du style de la citation) ... */
+        .quote-section blockquote:before,
+        .quote-section blockquote:after {
+            content: '“';
+            font-size: 5rem;
+            position: absolute;
+            top: -20px;
+            left: 5px;
+            color: var(--color-yellow);
+            opacity: 0.5;
+        }
+
+        .quote-section blockquote:after {
+            content: '”';
+            left: auto;
+            right: 5px;
+        }
+
+
+        /* Pied de page */
+        footer {
+            background-color: var(--color-dark-gray);
+            border-top: 2px solid var(--color-yellow);
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        footer .disclaimer {
+            color: #aaaaaa;
+            margin-top: 10px;
+        }
+
+        /* Bouton Scroll to Top */
+        #scrollTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--color-yellow);
+            color: var(--color-black);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+            transition: opacity 0.3s ease;
+        }
+
+        #scrollTopBtn:hover {
+            opacity: 0.8;
+        }
+        /* Media Queries pour le responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .films-section h2 {
+                font-size: 2rem;
+            }
+
+            .film-container h3 {
+                font-size: 1.5rem;
+            }
+
+            .quote-section blockquote {
+                font-size: 1.2rem;
+            }
+            .films-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="hero-section">
+        <div class="hero-overlay">
+            <h1>Transformez votre vision du monde</h1>
+            <p>Une collection de films soigneusement choisis pour inspirer la réflexion, encourager la croissance personnelle et changer votre perspective sur la vie.</p>
+            <a href="#films" class="hero-button">Découvrir les films</a>
+        </div>
+    </main>
+
+    <section id="films" class="films-section">
+        <h2>La Sélection</h2>
+        <div class="films-grid" id="films-grid">
+            </div>
+        <div class="pagination" id="pagination">
+            </div>
+    </section>
+
+    <section class="quote-section">
+        <blockquote id="quote-text"></blockquote>
+    </section>
+
+    <footer>
+        <p>Je suis Ousmane KONFE et cette plateforme est juste une initiative personnelle, créée dans le but de partager des œuvres cinématographiques qui ont le potentiel d'inspirer et de provoquer une réflexion profonde.</p>
+        <p class="disclaimer">Je ne détiens aucun droit sur les films proposés, qui sont intégrés à partir de services externes. Cette initiative est à but non lucratif et vise uniquement le partage de connaissances et d'idées.</p>
+    </footer>
+
+    <button id="scrollTopBtn" title="Retourner en haut de la page">▲</button>
+
+    <script>
+        const filmsData = [
+            {
+                title: "Mary",
+                iframeSrc: "https://uqload.cx/embed-pbhm9sz555jr.html",
+                description: "Un homme se bat pour obtenir la garde de sa nièce, qui témoigne d'un don hors du commun pour les mathématiques."
+            },
+            {
+                title: "Un homme d'exception",
+                iframeSrc: "https://uqload.cx/embed-voikz0zved37.html",
+                description: "L'histoire vraie de John Nash, un mathématicien brillant mais asocial, qui lutte contre la schizophrénie paranoïde. Avec le soutien de sa femme Alicia, il parvient à surmonter ses démons intérieurs et à faire des contributions majeures à la théorie des jeux, lui valant le prix Nobel d'économie en 1994."
+            },
+            {
+                title: "Will Hunting",
+                iframeSrc: "https://uqload.cx/embed-113ofs3hmnn3.html",
+                description: "Will Hunting est un authentique génie mais également un rebelle aux élans imprévisibles. Il est né dans le quartier populaire de South Boston et a arrêté très tôt ses études, refusant le brillant avenir que pouvait lui procurer son intelligence. Il vit désormais entouré d'une bande de copains et passe son temps dans les bars a chercher la bagarre et à commettre quelques petits délits qui risquent bien de l'envoyer en prison. C'est alors que ses dons prodigieux en mathématiques attirent l'attention du professeur Lambeau, du Massachusetts Institute of Technology..."
+            },
+            {
+                title: "The Imitation Game",
+                iframeSrc: "https://uqload.cx/embed-9ivs1is4u058.html",
+                description: "1940 : Alan Turing, mathématicien, cryptologue, est chargé par le gouvernement Britannique de percer le secret de la célèbre machine de cryptage allemande Enigma, réputée inviolable. À la tête d'une équipe improbable de savants, linguistes, champions d'échecs et agents du renseignement, Turing s'attaque au chef-d'œuvre de complexité dont la clef peut conduire à la victoire. IMITATION GAME relate la façon dont Alan Turing, soumis à une intense pression, contribua à changer le cours de la Seconde Guerre mondiale et de l'Histoire. C'est aussi le portrait d'un homme qui se retrouva condamné par la société de l'époque en raison de son homosexualité et en mourut."
+            },
+            {
+                title: "L'homme qui défiait l'infini",
+                iframeSrc: "https://uqload.cx/embed-6vcwg8ddnmdz.html",
+                description: "L'histoire vraie de Srinivasa Ramanujan, un mathématicien autodidacte indien qui, malgré son manque de formation formelle, parvient à impressionner le célèbre mathématicien G.H. Hardy à l'Université de Cambridge. Ensemble, ils travaillent sur des théories révolutionnaires en mathématiques, mais Ramanujan doit également faire face aux défis culturels et personnels dans un pays étranger pendant la Première Guerre mondiale."
+            },
+            {
+                title: "Rain Man",
+                iframeSrc: "https://uqload.cx/embed-fkvj5g204k3g.html",
+                description: "À la mort de son père, Charlie Babbitt hérite d'une vieille Buick qu'il convoitait depuis longtemps, mais se voit spolié de quelque trois millions de francs versés à l'Institution psychiatrique Wallbrook au profit d'un bénéficiaire anonyme. Charlie se rend a Wallbrook et découvre l'heureux bénéficiaire. Il s'agit de Raymond, savant autiste, celui qu'il appelait dans son enfance Rain Man, qui représente ses seuls souvenirs heureux et qui n'est autre que son frère."
+            },
+            {
+                title: "Une merveilleuse histoire du temps",
+                iframeSrc: "https://uqload.cx/embed-fpoll7jvf221.html",
+                description: "À l’âge de 21 ans, Stephen Hawking est un brillant étudiant en Cosmologie à l’Université de Cambridge, passionné par les mystères de l’univers. De nouveaux horizons s’ouvrent lorsqu’il tombe amoureux d’une étudiante en arts, Jane Wilde. Mais le jeune homme se heurte alors à un diagnostic médical sans appel qui vient bouleverser ce bonheur. Alors que ses jours sont comptés, l’amour et le soutien sans faille de Jane, vont lui donner la force de s’attaquer aux recherches sur ce qu’il a désormais de plus précieux : le temps. Ensemble, ils défient l’impossible, pour aller au-delà de ce qu’ils auraient pu imaginer : le vingt et unième siècle."
+            },
+            {
+                title: "Le monde de Nathan",
+                iframeSrc: "https://uqload.cx/embed-02x9dwctp67m.html",
+                description: "Nathan est un adolescent de 15 ans atteint du syndrome d'Asperger, une forme d'autisme qui affecte sa capacité à interagir socialement. Brillant en mathématiques, il mène une vie solitaire jusqu'à ce qu'il rencontre une enseignante dévouée qui l'encourage à sortir de sa coquille et à explorer le monde au-delà des chiffres. À travers cette relation, Nathan découvre l'amitié, l'amour et la confiance en soi, tout en affrontant les défis liés à son trouble."
+            },
+            {
+                title: "Le prodige des échecs",
+                iframeSrc: "https://uqload.cx/embed-5idrvyjzelvy.html",
+                description: "L’histoire de Bobby Fischer, le prodige américain des échecs, qui à l’apogée de la guerre froide se retrouve pris entre le feu des deux superpuissances en défiant l’Empire Soviétique lors du match du siècle contre Boris Spassky. Son obsession de vaincre les Russes va peu à peu se transformer en une terrifiante lutte entre le génie et la folie de cet homme complexe qui n’a jamais cessé de fasciner le monde."
+            }
+        ];
+        
+        const filmsPerPage = 6;
+        const filmsGrid = document.getElementById("films-grid");
+        const pagination = document.getElementById("pagination");
+
+        // Fonction pour afficher les films de la page sélectionnée
+        function displayFilms(page) {
+            filmsGrid.innerHTML = '';
+            const start = (page - 1) * filmsPerPage;
+            const end = start + filmsPerPage;
+            const paginatedFilms = filmsData.slice(start, end);
+
+            paginatedFilms.forEach(film => {
+                const filmContainer = document.createElement("div");
+                filmContainer.className = "film-container";
+                filmContainer.innerHTML = `
+                    <h3>${film.title}</h3>
+                    <div class="video-wrapper">
+                        <IFRAME SRC="${film.iframeSrc}" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO allowfullscreen></IFRAME>
+                    </div>
+                    <p class="description">${film.description}</p>
+                    <button class="read-more-btn">Lire la suite</button>
+                `;
+                filmsGrid.appendChild(filmContainer);
+
+                // Ajouter l'écouteur pour le bouton "Lire la suite"
+                const readMoreBtn = filmContainer.querySelector('.read-more-btn');
+                const descriptionEl = filmContainer.querySelector('.description');
+                readMoreBtn.addEventListener('click', () => {
+                    descriptionEl.classList.toggle('expanded');
+                    readMoreBtn.textContent = descriptionEl.classList.contains('expanded') ? 'Lire moins' : 'Lire la suite';
+                });
+            });
+        }
+
+        // Fonction pour créer les boutons de pagination
+        function setupPagination() {
+            pagination.innerHTML = '';
+            const pageCount = Math.ceil(filmsData.length / filmsPerPage);
+            for (let i = 1; i <= pageCount; i++) {
+                const link = document.createElement("a");
+                link.href = "#films";
+                link.textContent = i;
+                link.addEventListener('click', () => {
+                    displayFilms(i);
+                    // Mettre à jour la classe active
+                    const currentActive = document.querySelector('.pagination a.active');
+                    if (currentActive) {
+                        currentActive.classList.remove('active');
+                    }
+                    link.classList.add('active');
+                });
+                pagination.appendChild(link);
+            }
+            // Afficher la première page par défaut et marquer le premier bouton comme actif
+            if (pagination.querySelector('a')) {
+                pagination.querySelector('a').classList.add('active');
+            }
+        }
+
+        // --- Fond d'écran dynamique ---
+        const heroSection = document.querySelector('.hero-section');
+        const images = [
+            '8bf538cdbf6fa7219d54fdd201bb6bc7.jpg',
+            '198b2f01e73b905772279616eccc7c65.jpg',
+            'aeeae5e4b2b342974ece1d7b4b27528a.jpg',
+            'c0896a8f2e95a5b66a2a6a47ecc245dd.jpg'
+        ];
+        let currentImageIndex = 0;
+
+        function changeBackgroundImage() {
+            heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${images[currentImageIndex]}')`;
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+        }
+
+        setInterval(changeBackgroundImage, 5000);
+        changeBackgroundImage(); // Appel initial pour définir la première image
+
+        // --- Citation dynamique ---
+        const quoteText = document.getElementById("quote-text");
+        const quotes = [
+            "Un film peut changer une journée. Une idée peut changer une vie.",
+            "La seule limite à notre réalisation de demain sera nos doutes d'aujourd'hui. – Franklin D. Roosevelt",
+            "La vie ne consiste pas à se trouver soi-même, mais à se créer soi-même. – George Bernard Shaw",
+            "Le voyage de mille lieues commence par un seul pas. – Lao Tseu",
+            "La connaissance parle, mais la sagesse écoute. – Jimi Hendrix"
+        ];
+        let currentQuoteIndex = 0;
+
+        function changeQuote() {
+            quoteText.textContent = quotes[currentQuoteIndex];
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+        }
+
+        setInterval(changeQuote, 5000);
+        changeQuote(); // Appel initial pour la première citation
+
+        // --- Bouton Scroll to Top ---
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        }
+
+        scrollTopBtn.addEventListener('click', () => {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        });
+
+        // Initialiser la page
+        displayFilms(1);
+        setupPagination();
+    </script>
+</body>
+</html>
