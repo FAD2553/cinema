@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'advert',
         'pub',
         'uqload',
+        'aliexpress',
         'banner'
     ];
 
@@ -31,4 +32,5 @@ document.addEventListener('DOMContentLoaded', function () {
     const observer = new MutationObserver(removeAdIframes);
     observer.observe(document.body, { childList: true, subtree: true });
 });
+
 
