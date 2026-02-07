@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Films pour l'Évolution Mentale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        /* Styles généraux */
+        :root{
+            --color-black: #000000;
+            --color-dark-gray: #1a1a1a;
+            --color-yellow: #FFFF00;
+            --color-light-gray: #333333;
+        }
+
+        html,body{
+            height:100%;
+        }
+
+        body {
+            background-color: var(--color-black);
+            color: var(--color-yellow);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        /* Landing Page (Page d'accueil) */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+            border-bottom: 5px solid var(--color-yellow);
+            padding: 20px;
+            position: relative;
+        }
+
+        .hero-overlay {
+            background-color: rgba(0, 0, 0, 0.55);
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .hero-section h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px var(--color-yellow);
+            margin: 0 0 20px 0;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .hero-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: var(--color-yellow);
+            color: var(--color-black);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            border: 2px solid var(--color-yellow);
+            transition: all 0.25s ease;
+            border-radius: 6px;
+        }
+
+        .hero-button:hover,
+        .hero-button:focus {
+            background-color: transparent;
+            color: var(--color-yellow);
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        /* Section des films */
+        .films-section {
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,1));
+        }
+
+        .films-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            border-bottom: 3px solid var(--color-yellow);
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 5px var(--color-yellow);
+        }
+
+        .films-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            box-sizing: border-box;
+        }
+
+        /* Conteneur de chaque film */
+        .film-container {
+            background-color: var(--color-dark-gray);
+            border: 2px solid var(--color-yellow);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.12);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .film-container:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 30px rgba(255,255,0,0.12);
+        }
+
+        .film-container h3 {
+            color: var(--color-yellow);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            margin: 0 0 12px 0;
+        }
+
+        .film-container .description {
+            font-size: 1rem;
+            line-height: 1.6;
+            text-align: left;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3; /* Standard property */
+            -webkit-box-orient: vertical;
+            margin: 12px 0 0 0;
+        }
+
+        /* État "expanded" : on enlève le clamp pour tout montrer */
+        .film-container .description.expanded {
+            display: block;
+            -webkit-line-clamp: unset;
+            -webkit-box-orient: initial;
+            overflow: visible;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--color-yellow);
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Vidéo responsive */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* Ratio 16:9 */
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .pagination a {
+            color: var(--color-yellow);
+            background-color: var(--color-dark-gray);
+            border: 2px solid var(--color-yellow);
+            padding: 10px 15px;
+            margin: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 6px;
+        }
+
+        .pagination a.active, .pagination a:hover {
+            background-color: var(--color-yellow);
+            color: var(--color-black);
+        }
+
+        /* Citation */
+        .quote-section {
+            background-color: var(--color-dark-gray);
+            border: 2px solid var(--color-yellow);
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 900px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .quote-section blockquote {
+            font-style: italic;
+            font-size: 1.5rem;
+            margin: 0;
+            padding: 0 20px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .quote-section blockquote:before {
+            content: '“';
+            font-size: 4rem;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            color: var(--color-yellow);
+            opacity: 0.45;
+        }
+
+        .quote-section blockquote:after {
+            content: '”';
+            font-size: 4rem;
+            position: absolute;
+            bottom: -18px;
+            right: 10px;
+            color: var(--color-yellow);
+            opacity: 0.45;
+        }
+
+        /* Pied de page */
+        footer {
+            background-color: var(--color-dark-gray);
+            border-top: 2px solid var(--color-yellow);
+            text-align: center;
+            padding: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--color-yellow);
+        }
+
+        footer .disclaimer {
+            color: #aaaaaa;
+            margin-top: 10px;
+        }
+
+        /* Bouton Scroll to Top */
+        #scrollTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--color-yellow);
+            color: var(--color-black);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+            transition: opacity 0.3s ease;
+        }
+
+        #scrollTopBtn:hover {
+            opacity: 0.8;
+        }
+
+        /* Modal Vidéo Amélioré (Style YouTube) */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 100000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto; /* Permettre le scroll sur mobile si besoin */
+        }
+
+        .video-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Aligner en haut pour le scroll */
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            display: flex;
+            flex-direction: row; /* Layout horizontal par défaut */
+            width: 100%;
+            max-width: 1600px;
+            background-color: transparent;
+            border: none;
+            gap: 24px;
+            animation: slideDown 0.3s ease;
+            position: relative;
+        }
+
+        /* Section Lecteur Vidéo (Gauche) */
+        .modal-main-player {
+            flex: 1; /* Prend l'espace restant */
+            background-color: black;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .modal-video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            width: 100%;
+            background: #000;
+        }
+
+        .modal-video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .modal-video-info {
+            padding: 20px;
+            color: #fff;
+            background-color: var(--color-dark-gray);
+        }
+
+        .modal-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .modal-video-info h2 {
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--color-yellow);
+            font-size: 1.5rem;
+        }
+
+        .fullscreen-btn {
+            background: transparent;
+            border: 1px solid var(--color-yellow);
+            color: var(--color-yellow);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .fullscreen-btn:hover {
+            background: var(--color-yellow);
+            color: var(--color-black);
+        }
+
+        .modal-video-info p {
+            line-height: 1.5;
+            color: #ddd;
+            margin-top: 10px;
+        }
+
+        /* Section Sidebar (Droite) */
+        .modal-sidebar {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* Custom Scrollbar pour la sidebar */
+        .modal-sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-sidebar::-webkit-scrollbar-track {
+            background: var(--color-dark-gray);
+        }
+        .modal-sidebar::-webkit-scrollbar-thumb {
+            background: var(--color-yellow);
+            border-radius: 4px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 0, 0.1);
+        }
+
+        .sidebar-thumb {
+            width: 168px;
+            min-width: 168px;
+            height: 94px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .sidebar-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sidebar-info h4 {
+            margin: 0 0 5px 0;
+            font-size: 0.95rem;
+            color: #fff;
+            line-height: 1.3;
+            max-height: 2.6rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        /* Bouton fermer repositionné */
+        .modal-close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 100001;
+        }
+        
+        .modal-close-btn:hover {
+            color: var(--color-yellow);
+        }
+
+        /* Thumbnail cliquable */
+        .film-thumbnail {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .film-thumbnail img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .film-thumbnail:hover img {
+            transform: scale(1.05);
+        }
+
+        .film-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .film-thumbnail:hover::after {
+            opacity: 1;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background-color: var(--color-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .play-button::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 20px solid var(--color-black);
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 4px;
+        }
+
+        .film-thumbnail:hover .play-button {
+            transform: translate(-50%, -50%) scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.6);
+        }
+
+        /* Media Queries pour le responsive */
+        /* Media Queries pour le responsive */
+        @media (max-width: 1024px) {
+            .modal-content {
+                flex-direction: column;
+                width: 95%;
+            }
+
+            .modal-sidebar {
+                width: 100%;
+                max-height: none;
+                overflow-y: visible;
+            }
+
+            .modal-close-btn {
+                top: -30px;
+                right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.2rem;
+                letter-spacing: 3px;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .films-section h2 {
+                font-size: 2rem;
+            }
+
+            .film-container h3 {
+                font-size: 1.25rem;
+            }
+
+            .quote-section blockquote {
+                font-size: 1.1rem;
+            }
+
+            .quote-section blockquote:before,
+            .quote-section blockquote:after {
+                font-size: 2.8rem;
+            }
+
+            .films-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pagination a {
+                padding: 8px 12px;
+                margin: 3px;
+            }
+
+            /* Styles spécifiques mobile pour le modal */
+            .video-modal.active {
+                padding: 10px;
+                display: block; /* Permet le scroll naturel sur mobile */
+            }
+
+            .modal-content {
+                margin-top: 40px; /* Espace pour le bouton fermer */
+            }
+
+            .modal-close-btn {
+                position: fixed;
+                top: 10px;
+                right: 15px;
+                background: rgba(0,0,0,0.5);
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 100002;
+            }
+
+            .play-button {
+                width: 60px;
+                height: 60px;
+            }
+
+            .play-button::before {
+                border-left: 16px solid var(--color-black);
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+            }
+            
+            .sidebar-thumb {
+                width: 120px;
+                min-width: 120px;
+                height: 68px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="hero-section" aria-label="Section d'accueil">
+        <img class="hero-video" src="ld.jpg" type="image/jpg">
+        <div class="hero-overlay">
+            <h1>Transformez votre vision du monde</h1>
+            <p>Une collection de films soigneusement choisis pour inspirer la réflexion, encourager la croissance personnelle et changer votre perspective sur la vie.</p>
+            <a href="#films" class="hero-button">Découvrir les films</a>
+        </div>
+    </main>
+
+    <section id="films" class="films-section" aria-labelledby="films-title">
+        <h2 id="films-title">La Sélection</h2>
+        <div class="films-grid" id="films-grid" role="list">
+            <!-- Films insérés par JS -->
+        </div>
+        <nav class="pagination" id="pagination" aria-label="Pagination des films">
+            <!-- Pagination insérée par JS -->
+        </nav>
+    </section>
+
+    <section class="quote-section" aria-hidden="false">
+        <blockquote id="quote-text" aria-live="polite"></blockquote>
+    </section>
+
+    <footer>
+        <p>Je suis Ousmane KONFE et cette plateforme est juste une initiative personnelle, créée dans le but de partager des œuvres cinématographiques qui ont le potentiel d'inspirer et de provoquer une réflexion profonde.</p>
+        <p class="disclaimer">Je ne détiens aucun droit sur les films proposés, qui sont intégrés à partir de services externes. Cette initiative est à but non lucratif et vise uniquement le partage de connaissances et d'idées.</p>
+    </footer>
+
+    <button id="scrollTopBtn" title="Retourner en haut de la page" aria-label="Retourner en haut">▲</button>
+
+    <!-- Modal Vidéo Amélioré -->
+    <div id="videoModal" class="video-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modalClose" aria-label="Fermer le lecteur vidéo">×</button>
+            
+            <!-- Section Gauche : Lecteur Vidéo -->
+            <div class="modal-main-player">
+                <div class="modal-video-wrapper" id="modalVideoWrapper">
+                    <!-- L'iframe sera inséré ici -->
+                </div>
+                <div class="modal-video-info">
+                    <div class="modal-info-header">
+                        <h2 id="modalVideoTitle">Titre du film</h2>
+                        <button id="fullscreenBtn" class="fullscreen-btn" aria-label="Passer en plein écran">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                            Plein écran
+                        </button>
+                    </div>
+                    <p id="modalVideoDesc">Description du film...</p>
+                </div>
+            </div>
+
+            <!-- Section Droite : Liste des autres films -->
+            <div class="modal-sidebar">
+                <h3 style="color:var(--color-yellow); margin:0 0 10px 0; font-family:'Orbitron', sans-serif;">À suivre</h3>
+                <div id="modalSidebarList">
+                    <!-- Les suggestions seront générées ici -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const filmsData = [
+            {
+                title: "Mary",
+                iframeSrc: "https://uqload.cx/embed-pbhm9sz555jr.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/wHyrEoiAjFQ6HigTSgoI20CrlTc.jpg",
+                description: "Un homme se bat pour obtenir la garde de sa nièce, qui témoigne d'un don hors du commun pour les mathématiques."
+            },
+            {
+                title: "Un homme d'exception",
+                iframeSrc: "https://uqload.cx/embed-voikz0zved37.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/AjoFwrErCHZYCx4pYqH1F0CjrcA.jpg",
+                description: "L'histoire vraie de John Nash, un mathématicien brillant mais asocial, qui lutte contre la schizophrénie paranoïde. Avec le soutien de sa femme Alicia, il parvient à surmonter ses démons intérieurs et à faire des contributions majeures à la théorie des jeux, lui valant le prix Nobel d'économie en 1994."
+            },
+            {
+                title: "Will Hunting",
+                iframeSrc: "https://uqload.cx/embed-113ofs3hmnn3.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/bABCBKYBK7A5G1x0FzoeoNfuj2.jpg",
+                description: "Will Hunting est un authentique génie mais également un rebelle aux élans imprévisibles. Il est né dans le quartier populaire de South Boston et a arrêté très tôt ses études, refusant le brillant avenir que pouvait lui procurer son intelligence. Il vit désormais entouré d'une bande de copains et passe son temps dans les bars à chercher la bagarre et à commettre quelques petits délits qui risquent bien de l'envoyer en prison. C'est alors que ses dons prodigieux en mathématiques attirent l'attention du professeur Lambeau, du Massachusetts Institute of Technology..."
+            },
+            {
+                title: "The Imitation Game",
+                iframeSrc: "https://uqload.cx/embed-9ivs1is4u058.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/gBxCZuieAe8KClWWP1vVijXBlTp.jpg",
+                description: "1940 : Alan Turing, mathématicien, cryptologue, est chargé par le gouvernement britannique de percer le secret de la machine Enigma. À la tête d'une équipe improbable, Turing contribue à changer le cours de la Seconde Guerre mondiale."
+            },
+            {
+                title: "L'homme qui défiait l'infini",
+                iframeSrc: "https://uqload.cx/embed-6vcwg8ddnmdz.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/xONOvNAPhlNBWmPruGdKWzMbRzb.jpg",
+                description: "L'histoire vraie de Srinivasa Ramanujan, un mathématicien autodidacte indien qui, malgré son manque de formation formelle, parvient à impressionner le célèbre mathématicien G.H. Hardy à Cambridge."
+            },
+            {
+                title: "Rain Man",
+                iframeSrc: "https://uqload.cx/embed-fkvj5g204k3g.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/kdYcB7ydyJdNfPbvsFponC0qb57.jpg",
+                description: "À la mort de son père, Charlie Babbitt découvre que la majeure partie de l'héritage a été léguée à un bénéficiaire anonyme : Raymond, son frère autiste, un génie des nombres surnommé 'Rain Man'."
+            },
+            {
+                title: "Une merveilleuse histoire du temps",
+                iframeSrc: "https://uqload.cx/embed-fpoll7jvf221.html",
+                thumbnail: "./img/Une_merveilleuse_histoire_du_temps.webp",
+                description: "La vie et les combats de Stephen Hawking depuis ses années d'études jusqu'à ses recherches sur le temps, dans le contexte de son histoire personnelle."
+            },
+            {
+                title: "Le monde de Nathan",
+                iframeSrc: "https://uqload.cx/embed-02x9dwctp67m.html",
+                thumbnail: "./img/452714.webp",
+                description: "Nathan, adolescent atteint du syndrome d'Asperger, découvre l'amitié et l'amour grâce à une enseignante qui l'encourage à sortir de sa coquille."
+            },
+             {
+                title: "Social Network",
+                iframeSrc: "https://uqload.cx/embed-q4yvghue7qb2.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/n0ybibhJtQ5icDqTp8eRytcIHJx.jpg",
+                description: "Un soir d'hiver 2003, Mark Zuckerberg, étudiant à Harvard et expert en informatique, s'installe devant son ordinateur et se met à travailler avec frénésie sur une nouvelle idée, autour du développement de programme et de blogs. Ce qui prend forme dans cette chambre ce soir-là deviendra très vite un réseau communautaire à échelle mondiale et une révolution dans la communication. Seulement six années et quelques 500 millions d'amis plus tard, Mark Zuckerberg est devenu le plus jeune milliardaire de l'histoire… Cependant, pour cet entrepreneur, la réussite amène à la fois des complications personnelles et légales."
+            },
+            {
+                title: "Oppenheimer",
+                iframeSrc: "https://uqload.cx/embed-zk9j981n2jwj.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+                description: "L'histoire de J. Robert Oppenheimer, le physicien théoricien américain qui a dirigé le projet Manhattan, aboutissant au développement de la première bombe atomique pendant la Seconde Guerre mondiale."
+            },
+            {
+                title: "Rocketman",
+                iframeSrc: "https://uqload.cx/embed-2ob0h5bhp9y6.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/f4FF18ia7yTvHf2izNrHqBmgH8U.jpg",
+                description: "Rocketman nous raconte la vie hors du commun d’Elton John, depuis ses premiers succès jusqu’à sa consécration internationale. Le film retrace la métamorphose de Reginald Dwight, un jeune pianiste prodige timide, en une superstar mondiale. Il est aujourd’hui connu sous le nom d’Elton John. Son histoire inspirante - sur fond des plus belles chansons de la star – nous fait vivre l’incroyable succès d’un enfant d’une petite ville de province devenu icône de la pop culture mondiale."
+            },
+            {
+                title: "Bohemian Rhapsody",
+                iframeSrc: "https://uqload.cx/embed-xhqmuwx0imur.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
+                description: "L'histoire de Freddie Mercury, le légendaire chanteur du groupe Queen, et de leur ascension vers la gloire mondiale, culminant avec leur performance emblématique au Live Aid en 1985."
+            },
+            {
+                title: "Lincoln",
+                iframeSrc: "https://uqload.cx/embed-6g3c68vpvkbf.html",
+                thumbnail: "./img/20244611.jpg",
+                description: "En 1865, alors que la guerre de Sécession fait rage, le président Abraham Lincoln se bat pour faire adopter le treizième amendement, qui abolirait l'esclavage aux États-Unis."
+            },
+            {
+                title: "Yves Saint Laurent",
+                iframeSrc: "https://uqload.cx/embed-hqof0jgsgn1l.html",
+                thumbnail: "./img/téléchargement.jpeg",
+                description: "Paris, 1957. À tout juste 21 ans, Yves Saint Laurent est appelé à prendre en main les destinées de la prestigieuse maison de haute couture fondée par Christian Dior, récemment décédé. Lors de son premier défilé triomphal, il fait la connaissance de Pierre Bergé, rencontre qui va bouleverser sa vie. Amants et partenaires en affaires, les deux hommes s’associent trois ans plus tard pour créer la société Yves Saint Laurent. Malgré ses obsessions et ses démons intérieurs, Yves Saint Laurent s’apprête à révolutionner le monde de la mode avec son approche moderne et iconoclaste."
+            },
+            {
+                title: "Le loup de Wall Street",
+                iframeSrc: "https://uqload.cx/embed-74481937q0w5.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/34m2tygAYBGqA9MXKhRDtzYd4MR.jpg",
+                description: "Sa licence de courtier en poche, et les narines déjà pleines de cocaïne, Jordan Belfort est prêt à conquérir Wall Street. Ce jour d'octobre, un krach, le plus important depuis 1929, vient piétiner ses rêves de grandeur. C'est finalement à Long Island qu'il échoue et qu'il monte sa propre affaire de courtage. Son créneau : le hors-cote. Sa méthode : l'arnaque. Son équipe : des vendeurs ou des petits trafiquants."
+            },
+            {
+                title: "The big short",
+                iframeSrc: "https://uqload.cx/embed-x2dqmchmd7rj.html",
+                thumbnail: "https://image.tmdb.org/t/p/w500/isuQWbJPbjybBEWdcCaBUPmU0XO.jpg",
+                description: "En 2006-2007, plusieurs investisseurs prévoient l'effondrement du marché immobilier américain et décident de parier contre les prêts hypothécaires à risque, ce qui leur permet de réaliser d'énormes profits lorsque la crise financière éclate."
+            },
+            {
+                title: "The Founder",
+                iframeSrc: "https://uqload.cx/embed-h190ei6jfmml.html",
+                thumbnail: "./img/téléchargement (1).jpeg",
+                description: "L'histoire vraie de Ray Kroc, un vendeur de milkshakes qui découvre un petit restaurant de hamburgers en Californie et transforme l'entreprise familiale des frères McDonald en une franchise mondiale."
+            },
+            {
+                title: "Jobs",
+                iframeSrc: "https://uqload.cx/embed-8bkin8rcssql.html",
+                thumbnail: "./img/téléchargement (2).jpeg",
+                description: "L'histoire de Steve Jobs, depuis ses débuts dans un garage jusqu'à la création d'Apple Inc., en passant par son éviction de l'entreprise et son retour triomphal."
+            },
+            {
+                title: "Invictus",
+                iframeSrc: "https://uqload.cx/embed-al81ie77smx3.html",
+                thumbnail: "./img/téléchargement (3).jpeg",
+                description: "En 1994, l'élection de Nelson Mandela consacre la fin de l'Apartheid, mais l'Afrique du Sud reste une nation profondément divisée sur le plan racial et économique. Pour unifier le pays et donner à chaque citoyen un motif de fierté, Mandela mise sur le sport, et fait cause commune avec le capitaine de la modeste équipe de rugby sud-africaine. Leur pari: se présenter à la coupe du monde de rugby de 1995..."
+            },
+            {
+                title: "Le stratège",
+                iframeSrc: "https://uqload.cx/embed-2clcbcx92144.html",
+                thumbnail: "./img/téléchargement (4).jpeg",
+                description: "Voici l’histoire vraie de Billy Beane, un ancien joueur de baseball prometteur qui, à défaut d’avoir réussi sur le terrain, décida de tenter sa chance en dirigeant une équipe comme personne ne l’avait fait auparavant… Alors que la saison 2002 se profile, Billy Beane, le manager général des Oakland Athletics, est confronté à une situation difficile : sa petite équipe a encore perdu ses meilleurs joueurs, attirés par les grands clubs et leurs gros salaires. Bien décidé à gagner malgré tout, il cherche des solutions qui ne coûtent rien et auxquelles personne n’aurait pensé avant… Il va s’appuyer sur des théories statistiques et engager Peter Brand, un économiste amateur de chiffres issu de Yale. Ensemble, contre tous les principes, ils reconsidèrent la valeur de chaque joueur sur la base des statistiques et réunissent une brochette de laissés-pour-compte oubliés par l’establishment du baseball."
+            },
+              {
+                title: "Sinners",
+                iframeSrc: "https://uqload.cx/embed-cuyyks8386d6.html",
+                thumbnail: "./img/téléchargement (5).jpeg",
+                description: "Alors qu’ils cherchent à s’affranchir d’un lourd passé, deux frères jumeaux reviennent dans leur ville natale pour repartir à zéro. Mais ils comprennent qu’une puissance maléfique bien plus redoutable guette leur retour avec impatience."
+            },
+            {
+                title: "Le prodige des échecs",
+                iframeSrc: "https://uqload.cx/embed-5idrvyjzelvy.html",
+                thumbnail: "./img/téléchargement (6).jpeg",
+                description: "L'histoire de Bobby Fischer, son ascension et sa lutte intérieure, sur fond de rivalité Est-Ouest pendant la guerre froide."
+            }
+        ];
+
+        const filmsPerPage = 6;
+        const filmsGrid = document.getElementById("films-grid");
+        const pagination = document.getElementById("pagination");
+
+        function createFilmCard(film) {
+            const filmContainer = document.createElement("div");
+            filmContainer.className = "film-container";
+            filmContainer.setAttribute('role', 'listitem');
+
+            const title = document.createElement("h3");
+            title.textContent = film.title;
+            filmContainer.appendChild(title);
+
+            // Créer la miniature cliquable au lieu de l'iframe
+            const thumbnailWrapper = document.createElement("div");
+            thumbnailWrapper.className = "film-thumbnail";
+            
+            const thumbnailImg = document.createElement("img");
+            thumbnailImg.src = film.thumbnail;
+            thumbnailImg.alt = `Miniature de ${film.title}`;
+            thumbnailImg.loading = "lazy";
+            thumbnailWrapper.appendChild(thumbnailImg);
+
+            // Bouton play
+            const playButton = document.createElement("div");
+            playButton.className = "play-button";
+            thumbnailWrapper.appendChild(playButton);
+
+            // Événement de clic pour ouvrir le modal
+            thumbnailWrapper.addEventListener("click", () => {
+                openVideoModal(film);
+            });
+
+            filmContainer.appendChild(thumbnailWrapper);
+
+            const desc = document.createElement("p");
+            desc.className = "description";
+            desc.textContent = film.description;
+            filmContainer.appendChild(desc);
+
+            const readMoreBtn = document.createElement("button");
+            readMoreBtn.className = "read-more-btn";
+            readMoreBtn.type = "button";
+            readMoreBtn.textContent = "Lire la suite";
+            readMoreBtn.addEventListener("click", () => {
+                desc.classList.toggle("expanded");
+                readMoreBtn.textContent = desc.classList.contains("expanded") ? "Lire moins" : "Lire la suite";
+                // scroll to show the full description on small screens when expanding
+                if (desc.classList.contains("expanded")) {
+                    desc.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }
+            });
+            filmContainer.appendChild(readMoreBtn);
+
+            return filmContainer;
+        }
+
+        function displayFilms(page = 1) {
+            filmsGrid.innerHTML = '';
+            const start = (page - 1) * filmsPerPage;
+            const end = start + filmsPerPage;
+            const paginatedFilms = filmsData.slice(start, end);
+
+            paginatedFilms.forEach(film => {
+                const card = createFilmCard(film);
+                filmsGrid.appendChild(card);
+            });
+
+            // ensure accessible focus on top of films section after navigation
+            const firstCard = filmsGrid.querySelector('.film-container');
+            if (firstCard) {
+                firstCard.tabIndex = -1;
+                firstCard.focus({ preventScroll: true });
+            }
+        }
+
+        function setupPagination() {
+            pagination.innerHTML = '';
+            const pageCount = Math.ceil(filmsData.length / filmsPerPage) || 1;
+            for (let i = 1; i <= pageCount; i++) {
+                const link = document.createElement("a");
+                link.href = "#films";
+                link.textContent = i;
+                link.setAttribute('role', 'button');
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    displayFilms(i);
+                    const currentActive = pagination.querySelector('a.active');
+                    if (currentActive) currentActive.classList.remove('active');
+                    link.classList.add('active');
+                });
+                pagination.appendChild(link);
+            }
+            const first = pagination.querySelector('a');
+            if (first) first.classList.add('active');
+        }
+
+        /* Gestion du modal vidéo */
+        const videoModal = document.getElementById('videoModal');
+        const modalVideoWrapper = document.getElementById('modalVideoWrapper');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalVideoTitle');
+        const modalDesc = document.getElementById('modalVideoDesc');
+        const modalSidebarList = document.getElementById('modalSidebarList');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        // Gestion du bouton Plein Écran
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                if (modalVideoWrapper.requestFullscreen) {
+                    modalVideoWrapper.requestFullscreen();
+                } else if (modalVideoWrapper.mozRequestFullScreen) { /* Firefox */
+                    modalVideoWrapper.mozRequestFullScreen();
+                } else if (modalVideoWrapper.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                    modalVideoWrapper.webkitRequestFullscreen();
+                } else if (modalVideoWrapper.msRequestFullscreen) { /* IE/Edge */
+                    modalVideoWrapper.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        function loadVideoInModal(film) {
+            // Créer l'iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = film.iframeSrc;
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allowfullscreen', 'true');
+            iframe.setAttribute('mozallowfullscreen', 'true');
+            iframe.setAttribute('webkitallowfullscreen', 'true');
+            iframe.setAttribute('title', `${film.title} - lecteur vidéo`);
+            iframe.setAttribute('referrerpolicy', 'no-referrer');
+            iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer');
+            
+            // Vider le wrapper et ajouter l'iframe
+            modalVideoWrapper.innerHTML = '';
+            modalVideoWrapper.appendChild(iframe);
+
+            // Mettre à jour les infos
+            modalTitle.textContent = film.title;
+            modalDesc.textContent = film.description;
+
+            // Mettre à jour la sidebar
+            updateSidebar(film);
+        }
+
+        function updateSidebar(currentFilm) {
+            modalSidebarList.innerHTML = '';
+            
+            // Filtrer pour ne pas afficher le film courant
+            const suggestions = filmsData.filter(f => f.title !== currentFilm.title);
+
+            suggestions.forEach(film => {
+                const item = document.createElement('div');
+                item.className = 'sidebar-item';
+                item.setAttribute('role', 'button');
+                item.setAttribute('tabindex', '0');
+                
+                item.innerHTML = `
+                    <div class="sidebar-thumb">
+                        <img src="${film.thumbnail}" alt="Miniature ${film.title}" loading="lazy">
+                    </div>
+                    <div class="sidebar-info">
+                        <h4>${film.title}</h4>
+                    </div>
+                `;
+
+                // Clic sur l'item : changer la vidéo principale
+                item.addEventListener('click', () => {
+                    loadVideoInModal(film);
+                    // Scroll sidebar to top slightly to show change context if needed
+                    // modalSidebarList.scrollTop = 0; 
+                });
+                
+                // Accessibilité clavier
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        loadVideoInModal(film);
+                    }
+                });
+
+                modalSidebarList.appendChild(item);
+            });
+        }
+
+        function openVideoModal(film) {
+            loadVideoInModal(film);
+            
+            // Afficher le modal
+            videoModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Empêcher le scroll
+        }
+
+        function closeVideoModal() {
+            // Masquer le modal
+            videoModal.classList.remove('active');
+            document.body.style.overflow = ''; // Réactiver le scroll
+            
+            // Vider l'iframe pour arrêter la vidéo
+            setTimeout(() => {
+                modalVideoWrapper.innerHTML = '';
+            }, 300); // Attendre la fin de l'animation
+        }
+
+        // Événements de fermeture
+        modalClose.addEventListener('click', closeVideoModal);
+
+        // Fermer en cliquant en dehors du contenu (sur l'overlay)
+        videoModal.addEventListener('click', (e) => {
+            // On vérifie si le clic est sur l'overlay (videoModal) lui-même
+            // et pas sur un de ses enfants (modal-content)
+            if (e.target === videoModal) {
+                closeVideoModal();
+            }
+        });
+
+        // Fermer avec la touche Échap
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+                closeVideoModal();
+            }
+        });
+
+        /* Hero background rotation */
+        const heroSection = document.querySelector('.hero-section');
+        const images = [
+            '198b2f01e73b905772279616eccc7c65.jpg',
+            'c0896a8f2e95a5b66a2a6a47ecc245dd.jpg'
+        ];
+        let currentImageIndex = 0;
+
+        function changeBackgroundImage() {
+            // Si aucune image disponible, on ne fait rien
+            if (!images || !images.length) return;
+            heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${images[currentImageIndex]}')`;
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+        }
+
+        // Lancer la rotation seulement si on a des images
+        if (images && images.length) {
+            changeBackgroundImage();
+            setInterval(changeBackgroundImage, 5000);
+        }
+
+        /* Quotes rotation */
+        const quoteText = document.getElementById("quote-text");
+        const quotes = [
+            "Un film peut changer une journée. Une idée peut changer une vie.",
+            "La seule limite à notre réalisation de demain sera nos doutes d'aujourd'hui. – F.D. Roosevelt",
+            "La vie ne consiste pas à se trouver soi-même, mais à se créer soi-même. – G.B. Shaw",
+            "Le voyage de mille lieues commence par un seul pas. – Lao Tseu",
+            "La connaissance parle, mais la sagesse écoute. – Jimi Hendrix"
+        ];
+        let currentQuoteIndex = 0;
+
+        function changeQuote() {
+            if (!quotes || quotes.length === 0) return;
+            quoteText.textContent = quotes[currentQuoteIndex];
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+        }
+
+        changeQuote();
+        setInterval(changeQuote, 5000);
+
+        /* Scroll to top button */
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        }
+
+        window.addEventListener('scroll', scrollFunction, { passive: true });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // Initialiser la page
+        displayFilms(1);
+        setupPagination();
+    </script>
+    
+
+    <!-- Début : Bannière AdBlock (affiche seulement si aucun bloqueur détecté, seulement sur la page d'accueil) -->
+<style>
+  /* Styles de la bannière - responsive */
+  #adblock-banner {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    max-width: 1200px;
+    margin: 12px auto;
+    background: rgba(26,26,26,0.98);
+    color: var(--color-yellow, #ffff00);
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    padding: 12px 14px;
+    z-index: 99999;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+    border-radius: 8px;
+    display: none; /* affichage contrôlé par JS */
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  #adblock-banner .adblock-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center; }
+
+  #adblock-banner a.adblock-cta {
+    display:inline-block;
+    padding:8px 14px;
+    background: var(--color-yellow, #ffff00);
+    color: var(--color-black, #000);
+    text-decoration:none;
+    border-radius:6px;
+    font-weight:700;
+    border:2px solid var(--color-yellow, #ffff00);
+  }
+
+  #adblock-banner button.adblock-close {
+    background: transparent;
+    color: var(--color-yellow, #ffff00);
+    border:1px solid var(--color-yellow, #ffff00);
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:600;
+  }
+
+  /* Desktop: en haut */
+  @media (min-width: 601px) {
+    #adblock-banner { top: 12px; bottom: auto; }
+  }
+
+  /* Mobile: en bas pour ne pas cacher le header */
+  @media (max-width: 600px) {
+    #adblock-banner { bottom: 12px; top: auto; left: 8px; right: 8px; padding:10px; }
+    #adblock-banner .message { font-size: 0.95rem; }
+    #adblock-banner a.adblock-cta { padding:8px 12px; }
+  }
+</style>
+
+<div id="adblock-banner" role="dialog" aria-live="polite" aria-label="Suggestion d'installation d'AdBlock">
+  <div class="message" style="max-width:760px;">
+    <strong>Pour une expérience sans publicités, installez AdBlock avant de profiter des films.</strong>
+  </div>
+
+  <div class="adblock-actions">
+    <a class="adblock-cta" id="adblock-cta"
+       href="https://getadblock.com"
+       target="_blank"
+       rel="noopener noreferrer">
+      Télécharger AdBlock
+    </a>
+
+    <button type="button" class="adblock-close" id="adblock-close" aria-label="Fermer la suggestion AdBlock"
+      onclick="(function(){
+        try{
+          localStorage.setItem('adblock_banner_closed_v2',
+            JSON.stringify({ts:new Date().toISOString()}));
+        }catch(e){}
+        var b=document.getElementById('adblock-banner');
+        if(b) b.style.display='none';
+        return false;
+      })()">
+      Fermer
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  // Détection simple du mobile
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  const isAndroid = /android/i.test(ua);
+
+  const link = document.getElementById('adblock-cta');
+  if (!link) return;
+
+  if (isIOS) {
+    // Lien AdGuard/Adblock pour Safari iOS
+    link.href = 'https://apps.apple.com/app/adguard-content-blocker/id1047223162';
+  } else if (isAndroid) {
+    // Lien Play Store pour Android
+    link.href = 'https://adguard.com/fr/cb-products.html?aid=28071&utm_campaign=other_product&utm_medium=chrome_dialog&utm_source=content_blocker';
+  }
+})();
+</script>
+
+
+<script>
+(function () {
+  const STORAGE_KEY = 'adblock_banner_closed_v2';
+  const STORAGE_TTL_DAYS = 30;
+
+  // 1) Vérifier si on est sur la "page d'accueil" (racine ou index.html)
+  const pathname = window.location.pathname || '/';
+  const isHomepage = (pathname === '/' || pathname.endsWith('/index.html') || pathname === '');
+
+  // 2) Vérifier si le visiteur a déjà fermé la bannière récemment
+  function isClosedRecently() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      const obj = JSON.parse(raw);
+      if (!obj || !obj.ts) return false;
+      const ageMs = Date.now() - new Date(obj.ts).getTime();
+      const ttlMs = STORAGE_TTL_DAYS * 24 * 60 * 60 * 1000;
+      return ageMs < ttlMs;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function saveClosed() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ts: new Date().toISOString() }));
+    } catch (e) {
+      // ignore (private mode)
+    }
+  }
+
+  // 3) Détection basique d'adblockers (technique de "bait")
+  // Crée un élément avec un nom fréquemment bloqué par les extensions (ads, ad, adsbox, pub, banner...)
+  function detectAdblock(timeout = 120) {
+    return new Promise((resolve) => {
+      try {
+        const bait = document.createElement('div');
+        bait.className = 'adsbox ad-unit ad-banner pub_300x250 ad-container';
+        // styles pour éviter que l'élément change la mise en page
+        bait.style.width = '1px';
+        bait.style.height = '1px';
+        bait.style.position = 'absolute';
+        bait.style.left = '-9999px';
+        document.body.appendChild(bait);
+
+        // Vérifier après un court délai (les bloqueurs cachent / suppriment rapidement)
+        setTimeout(() => {
+          let blocked = false;
+          try {
+            const cs = window.getComputedStyle(bait);
+            // si display none, visibility hidden, ou offsetHeight 0 -> probablement bloqué
+            if (!cs || cs.display === 'none' || cs.visibility === 'hidden') blocked = true;
+            if (bait.offsetParent === null && bait.offsetHeight === 0) blocked = true;
+            // certaines extensions retirent complètement l'élément
+            if (!document.body.contains(bait)) blocked = true;
+          } catch (e) {
+            blocked = false;
+          } finally {
+            try { bait.remove(); } catch (e) {}
+            resolve(blocked);
+          }
+        }, timeout);
+      } catch (e) {
+        resolve(false); // si erreur, on suppose pas d'adblock
+      }
+    });
+  }
+
+  // 4) Contrôle d'affichage : si on est sur l'accueil, si pas fermé, et si aucun adblock détecté -> afficher
+  (async function decideAndShow() {
+    if (!isHomepage) return;                 // seulement page d'accueil
+    if (isClosedRecently()) return;          // déjà fermé récemment
+
+    // attendre que body existe (au cas où script chargé tôt)
+    if (!document.body) {
+      await new Promise(r => {
+        const obs = new MutationObserver(() => {
+          if (document.body) { obs.disconnect(); r(); }
+        });
+        obs.observe(document.documentElement, { childList: true });
+      });
+    }
+
+    const adblockDetected = await detectAdblock();
+
+    // Si adblock détecté, on ne propose pas l'installation (il est déjà présent)
+    if (adblockDetected) return;
+
+    // Afficher la bannière
+    const banner = document.getElementById('adblock-banner');
+    if (banner) {
+      banner.style.display = 'flex';
+      // focus sur le bouton téléchargement pour accessibilité si souhaité
+      const cta = document.getElementById('adblock-cta');
+      if (cta) cta.setAttribute('tabindex', '0');
+
+      // Gestion fermeture
+      const closeBtn = document.getElementById('adblock-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          banner.style.display = 'none';
+          saveClosed();
+        });
+      }
+
+      // Si l'utilisateur clique sur le lien "Télécharger", on considère la bannière fermée
+      if (cta) {
+        cta.addEventListener('click', () => {
+          try { saveClosed(); } catch (e) {}
+          // ouverture se fait par target="_blank"
+        });
+      }
+
+      // Fermer avec Echap
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+          if (banner && banner.style.display !== 'none') {
+            banner.style.display = 'none';
+            saveClosed();
+          }
+        }
+      }, { once: false });
+    }
+  })();
+})();
+</script>
+<!-- Fin : Bannière AdBlock -->
+
+
+</body>
+</html>
